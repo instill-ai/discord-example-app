@@ -112,9 +112,15 @@ export const TG_COMMAND = {
     },
     {
       type: 4, // Integer
-      name: 'output_length',
-      description: 'Enter length of text to generate (max: 200 words)',
-      required: true,
+      name: 'output_len',
+      description: 'Enter length of text to generate (default: 100 words, max: 200 words)',
+      //required: true,
+    },
+    {
+      type: 4, // Integer
+      name: 'seed',
+      description: 'Randon seed for genration (value=[0, 65535], default: random())',
+      //required: true,
     },
   ],
   type: 1,

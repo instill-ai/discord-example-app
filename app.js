@@ -133,29 +133,55 @@ function handleHello(req, res) {
  * @param {*} res 
  */
 function handleTextGeneration(req, res) {
+
   const MAX_LENGTH = 200; // this is a hard threshold assigned by the service.
   const input = req.body.data.options[0].value;
-  const output_len = req.body.data.options[1].value;
-  console.log("TG [prompt]: " + input + "  [len]: " + output_len);
+  let output_len = 100;
+  let seed = Math.floor(Math.random() * 65536);
 
+  // read optional parameters
+  for(let i = 1; i < req.body.data.options.length ; i++){
+    if (req.body.data.options[i].name == 'output_len') {
+      output_len = req.body.data.options[i].value;
+    } else if (req.body.data.options[i].name == 'seed') {
+      seed = req.body.data.options[i].value;
+    }
+  }
+
+  // Print arguments 
+  console.log("TG [prompt]: " + input + "  [output_len]: " + output_len + " [seed]:" + seed);
+
+  // Check arguments integrity
   if (output_len > MAX_LENGTH) {
-    console.log("Length exceeds the limit (max: 200)")
+    console.log("output_len exceeds the limit (max: 200)")
     return res.send({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `VDP-DEMO: Sorry our pipeline is too young to process such complex work at thte moment. Please make sure the "output_length" stays within its capacity (max: 200).`
+        content: `VDP-DEMO: Sorry our pipeline is too young to process such complex work at thte moment. Please make sure the "output_len" stays within its capacity (max: 200).`
+      },
+    });
+  } else if (seed < 0 || seed > 65535) {
+    console.log("seed our of the range [0, 65535]")
+    return res.send({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: `VDP-DEMO: Sorry our pipeline is too young to process such complex work at thte moment. Please make sure the "seed" stays within range [0, 65535].`
       },
     });
   }
 
-  TriggerTextGenerationPipeilne(input, output_len).then((output) => {
-    console.log("TG outputs:")
+  // Triger VDP Text Generation Pipeline
+  TriggerTextGenerationPipeilne(input, output_len, seed).then((output) => {
+    console.log("TG output len: ", output.length, "   content: ")
     console.log(output)
+    if (output.length > 2000) {
+      output = output.slice(0,1800)
+    }
     // Send a message into the channel where command was triggered from
     return res.send({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: "↓↓↓ INPUTS ↓↓↓\n[Prompt]: " + input + "    [Output Length]: " + output_len + "\n↓↓↓ OUTPUTS ↓↓↓\n" + output,
+        content: "INPUTS\n[ prompt ]: " + input + "    [ output_len ]: " + output_len + "    [ seed ]: " + seed + "\nOUTPUTS\n" + output,
       },
     });
   })

@@ -7,10 +7,8 @@ const PIPE_ADDR = '/v1alpha/pipelines/';
 const GPT2 = 'gpt2/trigger'
 
 // Text-to-text pipeline demo
-export async function TriggerTextGenerationPipeilne(input, output_len) {
+export async function TriggerTextGenerationPipeilne(input, output_len, seed) {
   
-  const seed = Math.floor(Math.random() * 65536);
-
   const query = JSON.stringify({
     "task_inputs": [
       {
