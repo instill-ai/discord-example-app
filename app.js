@@ -133,17 +133,29 @@ function handleHello(req, res) {
  * @param {*} res 
  */
 function handleTextGeneration(req, res) {
+  const MAX_LENGTH = 200; // this is a hard threshold assigned by the service.
   const input = req.body.data.options[0].value;
-  console.log("TG prompt: " + input);
+  const output_len = req.body.data.options[1].value;
+  console.log("TG [prompt]: " + input + "  [len]: " + output_len);
 
-  TriggerTextGenerationPipeilne(input).then((output) => {
+  if (output_len > MAX_LENGTH) {
+    console.log("Length exceeds the limit (max: 200)")
+    return res.send({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: `VDP-DEMO: Sorry our pipeline is too young to process such complex work at thte moment. Please make sure the "output_length" stays within its capacity (max: 200).`
+      },
+    });
+  }
+
+  TriggerTextGenerationPipeilne(input, output_len).then((output) => {
     console.log("TG outputs:")
     console.log(output)
     // Send a message into the channel where command was triggered from
     return res.send({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: output,
+        content: "↓↓↓ INPUTS ↓↓↓\n[Prompt]: " + input + "    [Output Length]: " + output_len + "\n↓↓↓ OUTPUTS ↓↓↓\n" + output,
       },
     });
   })

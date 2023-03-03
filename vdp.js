@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 // Set up service URL
 const WEB_ADDR = 'https://demo.instill.tech';
 const PIPE_ADDR = '/v1alpha/pipelines/';
@@ -6,16 +7,18 @@ const PIPE_ADDR = '/v1alpha/pipelines/';
 const GPT2 = 'gpt2/trigger'
 
 // Text-to-text pipeline demo
-export async function TriggerTextGenerationPipeilne(input) {
+export async function TriggerTextGenerationPipeilne(input, output_len) {
   
+  const seed = Math.floor(Math.random() * 65536);
+
   const query = JSON.stringify({
     "task_inputs": [
       {
         "text_generation": {
           "prompt": input,
-          "output_len": 50,
+          "output_len": output_len,
           "topk": 5,
-          "seed": 0
+          "seed": seed
         }
       }
     ]

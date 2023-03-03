@@ -4,7 +4,7 @@ import { capitalize, DiscordRequest } from './utils.js';
 
 export async function HasGuildCommands(appId, guildId, commands) {
   if (guildId === '' || appId === '') return;
-  ResetGuildCommand(appId, guildId)
+  //ResetGuildCommand(appId, guildId)
   commands.forEach((c) => HasGuildCommand(appId, guildId, c));
 }
 
@@ -24,7 +24,7 @@ async function HasGuildCommand(appId, guildId, command) {
         console.log(`Installing... "${command['name']}"`);
         InstallGuildCommand(appId, guildId, command);
       } else {
-        UpdateGuildCommand(appId, guildId, command);
+        InstallGuildCommand(appId, guildId, command);
         console.log(`"${command['name']}" command already installed`);
         console.log(`Updating... "${command['name']}"`);
       }
@@ -101,12 +101,19 @@ function createCommandChoices() {
 // Define text-to-text command 
 export const TG_COMMAND = {
   name: 'tg',
-  description: 'This demoes the text-to-text generation model.',
+  description: 'This demos the text generation model.',
   options: [
     {
-      type: 3,
+      type: 3, // String
       name: 'prompt',
-      description: 'Enter text for generation',
+      description: 'Enter text for generation (max: 200 words)',
+      required: true,
+      max_length: 200,
+    },
+    {
+      type: 4, // Integer
+      name: 'output_length',
+      description: 'Enter length of text to generate (max: 200 words)',
       required: true,
     },
   ],
