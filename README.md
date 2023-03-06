@@ -1,3 +1,23 @@
+# Getting Started app for VDP Discord Demo
+
+This project contains VDP discord demos based on the [discord-example-app](https://github.com/discord/discord-example-app), which details can be found below.
+
+We modified the following files to support our demos compared to the original example.
+
+```
+├── app.js      -> main entrypoint for app, refactored for better readibility.
+├── commands.js -> slash command payloads + helpers
+├── vdp.js    -> utility functions that enables interaction with VDP
+├── package.json  -> modified to support deployment on Glitch
+├── README.md
+└── .gitignore
+```
+
+To build a Discord app based on your VDP, you must set up the `service URL` and the `endpoints` in `vdp.js` in advance.
+
+For further information, please check our tutorial: [Build a Discord text-generation app with VDP].
+    
+
 # Getting Started app for Discord
 
 This project contains a basic rock-paper-scissors-style Discord app written in JavaScript, built for the [getting started guide](https://discord.com/developers/docs/getting-started).

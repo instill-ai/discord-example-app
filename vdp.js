@@ -7,7 +7,13 @@ const pipelineID = 'gpt2'
 const vdpConsole = `https://demo.instill.tech/pipelines/${pipelineID}`;
 const triggerPipelineEndpoint = `https://demo.instill.tech/pipelines/${pipelineID}/trigger`;
 
-// Text-to-text pipeline demo
+/**
+ * Text-to-text pipeline demo
+ * @param {string} input 
+ * @param {int} output_len 
+ * @param {int} seed 
+ * @returns 
+ */
 export async function TriggerTextGenerationPipeilne(input, output_len, seed) {
   
   const body = JSON.stringify({

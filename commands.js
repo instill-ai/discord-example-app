@@ -1,10 +1,11 @@
 import { response } from 'express';
-import { getRPSChoices } from './game.js';
+import { getRPSChoices } from './archive/game.js';
 import { capitalize, DiscordRequest } from './utils.js';
 
 export async function HasGuildCommands(appId, guildId, commands) {
   if (guildId === '' || appId === '') return;
-  //ResetGuildCommand(appId, guildId)
+  // Refresh guild command
+  ResetGuildCommand(appId, guildId)
   commands.forEach((c) => HasGuildCommand(appId, guildId, c));
 }
 
@@ -63,6 +64,7 @@ export async function UpdateGuildCommand(appId, guildId, command) {
 export async function ResetGuildCommand(appId, guildId) {
   // API endpoint to get and post guild commands
   const endpoint = `applications/${appId}/guilds/${guildId}/commands`;
+  console.log(`Resetting commands......`);
   // install command
   try {
     await DiscordRequest(endpoint, { method: 'PUT', body: [] });
@@ -83,20 +85,9 @@ export async function DeleteGuildCommand(appId, guildId, command) {
   }
 }
 
-// Get the game choices from game.js
-function createCommandChoices() {
-  const choices = getRPSChoices();
-  const commandChoices = [];
-
-  for (let choice of choices) {
-    commandChoices.push({
-      name: capitalize(choice),
-      value: choice.toLowerCase(),
-    });
-  }
-
-  return commandChoices;
-}
+/******************************/
+/* /Slash command definitions */
+/******************************/
 
 // Define text-to-text command 
 export const TG_COMMAND = {
@@ -126,42 +117,9 @@ export const TG_COMMAND = {
   type: 1,
 };
 
-// Define text-to-image command
-/*
-export const T2I_COMMAND = {
-  name: 't2i',
-  description: 'This demoes the text-to-image generation model.',
-  options: [
-    {
-      type: 3,
-      name: 'prompt',
-      description: 'Enter text for generation',
-      required: true,
-    },
-  ],
-  type: 1,
-};
-*/
-
 // New test command
 export const HELLO_COMMAND = {
   name: 'hello',
   description: 'New guild command',
-  type: 1,
-};
-
-// Command containing options
-export const CHALLENGE_COMMAND = {
-  name: 'challenge',
-  description: 'Challenge to a match of rock paper scissors',
-  options: [
-    {
-      type: 3,
-      name: 'object',
-      description: 'Pick your object',
-      required: true,
-      choices: createCommandChoices(),
-    },
-  ],
   type: 1,
 };
