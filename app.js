@@ -3,11 +3,9 @@ import express from 'express';
 import {
   InteractionType,
   InteractionResponseType,
-  InteractionResponseFlags,
 } from 'discord-interactions';
-import { VerifyDiscordRequest, getRandomEmoji} from './utils.js';
+import { VerifyDiscordRequest} from './utils.js';
 import {
-  HELLO_COMMAND,
   TG_COMMAND,
   HasGuildCommands,
 } from './commands.js';
@@ -51,11 +49,6 @@ app.post('/interactions', async function (req, res) {
       return handleTextGeneration(req, res);
     }
 
-    // "\hello" guild command
-    if (name === 'hello') {
-      return handleHello(req, res);
-    }
-
   }
 
   /**
@@ -74,9 +67,7 @@ app.listen(PORT, () => {
   console.log('Listening on port', PORT);
 
   // Check if guild commands from commands.js are installed (if not, install them)
-  
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
-    HELLO_COMMAND,
     TG_COMMAND,
   ]);
   
@@ -86,24 +77,6 @@ app.listen(PORT, () => {
 /****************************************************/
 /* Helper functions handling slash command requests */
 /****************************************************/
-
-/**
- * helper function for command "/hello"
- * @param {*} req 
- * @param {*} res 
- * @returns 
- */
-function handleHello(req, res) {
-  // Send a message into the channel where command was triggered from
-  return res.send({
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      // Fetches a random emoji to send from a helper function
-      content: 'hello world ' + getRandomEmoji(),
-    },z
-  });
-}
-
 
 /**
  * helper function for command "/tg"

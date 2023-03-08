@@ -116,10 +116,3 @@ export const TG_COMMAND = {
   ],
   type: 1,
 };
-
-// New test command
-export const HELLO_COMMAND = {
-  name: 'hello',
-  description: 'New guild command',
-  type: 1,
-};
