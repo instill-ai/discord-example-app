@@ -8,7 +8,7 @@ const vdpConsole = `https://demo.instill.tech/pipelines/${pipelineID}`;
 const triggerPipelineEndpoint = `https://demo.instill.tech/pipelines/${pipelineID}/trigger`;
 
 /**
- * Text-to-text pipeline demo
+ * Text Generation pipeline demo
  * @param {string} input 
  * @param {int} output_len 
  * @param {int} seed 
